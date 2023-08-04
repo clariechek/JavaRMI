@@ -1,12 +1,23 @@
-# Compile everything
-all: build runregistry server client clean
 
-build: javac -d ./ Calculator.java CalculatorImplementation.java CalculatorServer.java CalculatorClient.java
+# Directory for compiled classes
+BIN = ./bin/
 
-runregistry: rmiregistry &
+# Directory for source files
+SRC = ./src/
 
-server: java -classpath ./ CalculatorServer &
+FLAGS = -g -d $(BIN) -cp $(SRC)
 
-client: java -classpath ./ CalculatorClient
+COMPILE = javac $(FLAGS)
 
-clean: rm *.class
+JAVA_FILES = $(wildcard $(SRC)*.java)
+
+CLASS_FILES = $(JAVA_FILES:.java=.class)
+
+all: clean $(addprefix $(BIN), $(notdir $(CLASS_FILES)))
+
+$(BIN)%.class: $(SRC)%.java
+	@mkdir -p $(BIN)
+	$(COMPILE) $<
+
+clean:
+	rm -rf $(BIN)*
