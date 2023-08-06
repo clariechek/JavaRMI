@@ -72,11 +72,26 @@ public class CalculatorClient {
                 e.printStackTrace();
             }
         } else if (operation == 3) {
+            // Check if stack contains 0. 
+            boolean containsZero = false;
             try {
-                stub.pushOperation("lcm", clientID);
+                containsZero = stub.hasZero(clientID);
             } catch (Exception e) {
                 System.err.println("Client exception: " + e.toString());
                 e.printStackTrace();
+            }
+
+            // If yes, clear stack and return error message. Otherwise, push lcm operation.
+            if (containsZero) {
+                System.out.println("Cannot perform lcm on 0. All values have been removed from stack. Please enter a non-zero value.");
+                return;
+            } else {
+                try {
+                    stub.pushOperation("lcm", clientID);
+                } catch (Exception e) {
+                    System.err.println("Client exception: " + e.toString());
+                    e.printStackTrace();
+                }
             }
         } else if (operation == 4) {
             try {
@@ -152,7 +167,11 @@ public class CalculatorClient {
                 if (clientID < 0) {
                     System.out.println("Invalid client ID. Please enter a positive integer.");
                     continue;
+                } else if (!stub.createNewClientID(clientID)) {
+                    System.out.println("Client ID " + clientID + " already exists. Please choose a different client ID.");
+                    continue;
                 } else if (stub.createNewClientID(clientID)) {
+                    System.out.println("Client ID " + clientID + " created.");
                     stub.createNewClientStack(clientID);
                     break;
                 } else {
@@ -160,6 +179,7 @@ public class CalculatorClient {
                 }
             }
 
+            // Application loop
             while (true) {
                 // Display menu
                 client.printMenu();
@@ -181,9 +201,9 @@ public class CalculatorClient {
                 if (option == 1) {
                     client.pushValueOption(stub, clientID);
                 } else if (option == 2) {
-                    // Check if stack has at least 1 value before pushing operation
-                    if (client.isEmptyOption(stub, clientID)) {
-                        System.out.println("Stack is empty. Please push a value to the stack before pushing an operation.");
+                    // Check if stack has at least 2 values before pushing operation
+                    if (!stub.hasTwoValues(clientID)) {
+                        System.out.println("At least two values are required to perform an operation. Please push more values to the stack.");
                         continue;
                     } else {
                         client.pushOperationOption(stub, clientID);

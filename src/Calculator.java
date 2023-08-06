@@ -12,6 +12,8 @@ public interface Calculator extends Remote {
     int delayPop(int millis, int clientID) throws RemoteException;
     void createNewClientStack(int clientID) throws RemoteException;
     boolean createNewClientID(int clientID) throws RemoteException;
+    boolean hasTwoValues(int clientID) throws RemoteException;
+    boolean hasZero(int clientID) throws RemoteException;
     // int lcm(int a, int b) throws RemoteException;
     // int gcd(int a, int b) throws RemoteException;
 }

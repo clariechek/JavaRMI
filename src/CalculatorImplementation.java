@@ -15,10 +15,7 @@ public class CalculatorImplementation extends UnicastRemoteObject implements Cal
     // Check if clientID is unique
     public boolean createNewClientID(int clientID) throws RemoteException {
         if (clientStacks.containsKey(clientID)) {
-            System.out.println("Client ID " + clientID + " already exists. Please choose a different client ID.");
             return false;
-        } else {
-            System.out.println("Client ID " + clientID + " created.");
         }
         return true;
     }
@@ -57,20 +54,28 @@ public class CalculatorImplementation extends UnicastRemoteObject implements Cal
             }
             clientStacks.get(clientID).push(maximumVal);
         } else if (operator.equals("lcm")) {
-            // Find the least common multiple of all the values on the clientStacks
+            // Find the least common multiple of all the absolute values on the clientStacks
             while (clientStacks.get(clientID).size() > 1) {
-                int a = clientStacks.get(clientID).peek();
+                int a = Math.abs(clientStacks.get(clientID).peek());
                 clientStacks.get(clientID).pop();
-                int b = clientStacks.get(clientID).peek();
+                int b = Math.abs(clientStacks.get(clientID).peek());
                 clientStacks.get(clientID).pop();
                 clientStacks.get(clientID).push(lcm(a, b));
             }
         } else if (operator.equals("gcd")) {
-            // Find the greatest common divisor of all the values on the clientStacks
+            // // Check if the stack is empty or has only one value
+            // if (clientStacks.get(clientID).size() == 0) {
+            //     System.out.println("Stack is empty. At least two values are required to perform gcd.");
+            //     return;
+            // } else if (clientStacks.get(clientID).size() < 2) {
+            //     System.out.println("Stack has only one value. At least two values are required to perform gcd.");
+            //     return;
+            // }
+            // Find the greatest common divisor of the absolute values on the clientStacks
             while (clientStacks.get(clientID).size() > 1) {
-                int a = clientStacks.get(clientID).peek();
+                int a = Math.abs(clientStacks.get(clientID).peek());
                 clientStacks.get(clientID).pop();
-                int b = clientStacks.get(clientID).peek();
+                int b = Math.abs(clientStacks.get(clientID).peek());
                 clientStacks.get(clientID).pop();
                 clientStacks.get(clientID).push(gcd(a, b));
             }
@@ -124,5 +129,23 @@ public class CalculatorImplementation extends UnicastRemoteObject implements Cal
             e.printStackTrace();
         }
         return value;
+    }
+
+    // Checks if the client stack has at least 2 values
+    public boolean hasTwoValues(int clientID) throws RemoteException {
+        System.out.println("Checking if clientStacks has at least 2 values");
+        return (clientStacks.get(clientID).size() >= 2);
+    }
+
+    // Check if the client stack has value 0. If yes, pop all values from the stack.
+    public boolean hasZero(int clientID) throws RemoteException {
+        System.out.println("Checking if clientStacks has value 0");
+        if (clientStacks.get(clientID).contains(0)) {
+            while (!clientStacks.get(clientID).empty()) {
+                clientStacks.get(clientID).pop();
+            }
+            return true;
+        }
+        return false;
     }
 }
