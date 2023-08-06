@@ -27,6 +27,8 @@ public class CalculatorImplementationTest {
     @DisplayName("Single Client: Test min operation with values {0, 5}")
     void minOperationTest1() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
         calc.pushValue(0, 0);
         calc.pushValue(5, 0);
         calc.pushOperation("min", 0);
@@ -39,6 +41,8 @@ public class CalculatorImplementationTest {
     @DisplayName("Single Client: Test min operation with values {-4, 0, 5}")
     void minOperationTest2() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
         calc.pushValue(-4, 0);
         calc.pushValue(0, 0);
         calc.pushValue(5, 0);
@@ -52,6 +56,8 @@ public class CalculatorImplementationTest {
     @DisplayName("Single Client: Test max operation with values {59, 10003, 130, 2}")
     void maxOperationTest1() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
         calc.pushValue(59, 0);
         calc.pushValue(10003, 0);
         calc.pushValue(130, 0);
@@ -66,6 +72,8 @@ public class CalculatorImplementationTest {
     @DisplayName("Single Client: Test max operation with values {-27, 1, 0, -9}")
     void maxOperationTest2() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
         calc.pushValue(-27, 0);
         calc.pushValue(1, 0);
         calc.pushValue(0, 0);
@@ -80,6 +88,8 @@ public class CalculatorImplementationTest {
     @DisplayName("Single Client: Test gcd operation with values {5, 0}")
     void gcdOperationTest1() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
         calc.pushValue(5, 0);
         calc.pushValue(0, 0);
         calc.pushOperation("gcd", 0);
@@ -92,6 +102,8 @@ public class CalculatorImplementationTest {
     @DisplayName("Single Client: Test gcd operation with values {3}")
     void gcdOperationTest2() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
         calc.pushValue(3, 0);
         calc.pushOperation("gcd", 0);
         String expectedOutput = "At least two values are required to perform an operation. Please push more values to the stack.";
@@ -102,6 +114,8 @@ public class CalculatorImplementationTest {
     @DisplayName("Single Client: Test gcd operation with empty stack")
     void gcdOperationTest3() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
         calc.pushOperation("gcd", 0);
         String expectedOutput = "At least two values are required to perform an operation. Please push more values to the stack.";
         assertEquals(expectedOutput, outputStreamCaptor.toString().trim());
@@ -111,6 +125,8 @@ public class CalculatorImplementationTest {
     @DisplayName("Single Client: Test lcm operation with values {12}")
     void lcmOperationTest1() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
         calc.pushValue(12, 0);
         calc.pushOperation("lcm", 0);
         String expectedOutput = "At least two values are required to perform an operation. Please push more values to the stack.";
@@ -121,6 +137,8 @@ public class CalculatorImplementationTest {
     @DisplayName("Single Client: Test lcm operation with values {1, 5}")
     void lcmOperationTest2() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
         calc.pushValue(1, 0);
         calc.pushValue(5, 0);
         calc.pushOperation("lcm", 0);
@@ -133,6 +151,8 @@ public class CalculatorImplementationTest {
     @DisplayName("Single Client: Test lcm operation with empty stack")
     void lcmOperationTest3() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
         calc.pushOperation("lcm", 0);
         String expectedOutput = "At least two values are required to perform an operation. Please push more values to the stack.";
         assertEquals(expectedOutput, outputStreamCaptor.toString().trim());
@@ -142,6 +162,8 @@ public class CalculatorImplementationTest {
     @DisplayName("Single Client: Test lcm operation with values {97, 0}")
     void lcmOperationTest4() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
         calc.pushValue(97, 0);
         calc.pushValue(0, 0);
         calc.pushOperation("lcm", 0);
@@ -153,6 +175,10 @@ public class CalculatorImplementationTest {
     @DisplayName("Multiple Client: Test min operation with values {3, 5} for client ID 1 and {7, 9} for client ID 2")
     void minOperationTest3() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(1);
+        calc.createNewClientStack(1);
+        calc.createNewClientID(2);
+        calc.createNewClientStack(2);
         calc.pushValue(3, 1);
         calc.pushValue(7, 2);
         calc.pushValue(5, 1);
@@ -167,6 +193,10 @@ public class CalculatorImplementationTest {
     @DisplayName("Multiple Client: Test min operation with values {3, 5} for client ID 1 and {7, 9} for client ID 2")
     void minOperationTest4() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(1);
+        calc.createNewClientStack(1);
+        calc.createNewClientID(2);
+        calc.createNewClientStack(2);
         calc.pushValue(3, 1);
         calc.pushValue(7, 2);
         calc.pushValue(5, 1);
@@ -181,6 +211,10 @@ public class CalculatorImplementationTest {
     @DisplayName("Multiple Client: Test max operation with values {28, 13, 40} for client ID 1 and {-59, -3, -1} for client ID 2")
     void maxOperationTest3() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(1);
+        calc.createNewClientStack(1);
+        calc.createNewClientID(2);
+        calc.createNewClientStack(2);
         calc.pushValue(28, 1);
         calc.pushValue(13, 1);
         calc.pushValue(40, 1);
@@ -197,6 +231,10 @@ public class CalculatorImplementationTest {
     @DisplayName("Multiple Client: Test max operation with values {28, 13, 40} for client ID 1 and {-59, -3, -1} for client ID 2")
     void maxOperationTest4() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(1);
+        calc.createNewClientStack(1);
+        calc.createNewClientID(2);
+        calc.createNewClientStack(2);
         calc.pushValue(28, 1);
         calc.pushValue(13, 1);
         calc.pushValue(40, 1);
