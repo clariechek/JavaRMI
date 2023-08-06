@@ -10,53 +10,69 @@ public class CalculatorImplementation extends UnicastRemoteObject implements Cal
         super();
     }
 
-    private Stack<Integer> stk = new Stack<Integer>();
+    private Map<Integer, Stack<Integer>> clientStacks = new HashMap<>();
+
+    // Check if clientID is unique
+    public boolean createNewClientID(int clientID) throws RemoteException {
+        if (clientStacks.containsKey(clientID)) {
+            System.out.println("Client ID " + clientID + " already exists. Please choose a different client ID.");
+            return false;
+        } else {
+            System.out.println("Client ID " + clientID + " created.");
+        }
+        return true;
+    }
+
+    // Create a new stack for the client
+    public void createNewClientStack(int clientID) throws RemoteException {
+        Stack<Integer> newStack = new Stack<>();
+        clientStacks.put(clientID, newStack);
+    }
 
     // Implmentation of pushValue
-    public void pushValue(int val) throws RemoteException {
+    public void pushValue(int val, int clientID) throws RemoteException {
         System.out.println("Pushing value " + val);
-        stk.push(val);
+        clientStacks.get(clientID).push(val);
     }
 
     // Implementation of pushOperation
-    public void pushOperation(String operator) throws RemoteException {
+    public void pushOperation(String operator, int clientID) throws RemoteException {
         System.out.println("Pushing operation " + operator);
         if (operator.equals("min")) {
-            // Pop all values on the stk, find the minimum value, and push it back into the stk
-            int minimumVal = stk.peek();
-            stk.pop();
-            while (!stk.empty()) {
-                minimumVal = Math.min(minimumVal, stk.peek());
-                stk.pop();
+            // Pop all values on the clientStacks, find the minimum value, and push it back into the clientStacks
+            int minimumVal = clientStacks.get(clientID).peek();
+            clientStacks.get(clientID).pop();
+            while (!clientStacks.get(clientID).empty()) {
+                minimumVal = Math.min(minimumVal, clientStacks.get(clientID).peek());
+                clientStacks.get(clientID).pop();
             }
-            stk.push(minimumVal);
+            clientStacks.get(clientID).push(minimumVal);
         } else if (operator.equals("max")) {
-            // Pop all values on the stk, find the maximum value, and push it back into the stk
-            int maximumVal = stk.peek();
-            stk.pop();
-            while (!stk.empty()) {
-                maximumVal = Math.max(maximumVal, stk.peek());
-                stk.pop();
+            // Pop all values on the clientStacks, find the maximum value, and push it back into the clientStacks
+            int maximumVal = clientStacks.get(clientID).peek();
+            clientStacks.get(clientID).pop();
+            while (!clientStacks.get(clientID).empty()) {
+                maximumVal = Math.max(maximumVal, clientStacks.get(clientID).peek());
+                clientStacks.get(clientID).pop();
             }
-            stk.push(maximumVal);
+            clientStacks.get(clientID).push(maximumVal);
         } else if (operator.equals("lcm")) {
-            // Find the least common multiple of all the values on the stk
-            while (stk.size() > 1) {
-                int a = stk.peek();
-                stk.pop();
-                int b = stk.peek();
-                stk.pop();
-                stk.push(lcm(a, b));
+            // Find the least common multiple of all the values on the clientStacks
+            while (clientStacks.get(clientID).size() > 1) {
+                int a = clientStacks.get(clientID).peek();
+                clientStacks.get(clientID).pop();
+                int b = clientStacks.get(clientID).peek();
+                clientStacks.get(clientID).pop();
+                clientStacks.get(clientID).push(lcm(a, b));
             }
-            
         } else if (operator.equals("gcd")) {
-            // Find the greatest common divisor of all the values on the stk
-            while (stk.size() > 1) {
-                int a = stk.peek();
-                stk.pop();
-                int b = stk.peek();
-                stk.pop();
-                stk.push(gcd(a, b));
+            // Find the greatest common divisor of all the values on the clientStacks
+            while (clientStacks.get(clientID).size() > 1) {
+                int a = clientStacks.get(clientID).peek();
+                clientStacks.get(clientID).pop();
+                int b = clientStacks.get(clientID).peek();
+                clientStacks.get(clientID).pop();
+                clientStacks.get(clientID).push(gcd(a, b));
             }
         } else {
             System.out.println("Invalid operator " + operator);
@@ -81,30 +97,28 @@ public class CalculatorImplementation extends UnicastRemoteObject implements Cal
     }
 
     // Implementation of pop
-    public int pop() throws RemoteException {
+    public int pop(int clientID) throws RemoteException {
         System.out.println("Popping value");
-        int value = stk.peek();
-        stk.pop();
+        int value = clientStacks.get(clientID).peek();
+        clientStacks.get(clientID).pop();
         return value;
     }
 
     // Implementation of isEmpty
-    public boolean isEmpty() throws RemoteException {
-        System.out.println("Checking if stk is empty");
-        if (stk.empty()) {
-            return true;
-        }
-        return false;
+    public boolean isEmpty(int clientID) throws RemoteException {
+        System.out.println("Checking if clientStacks is empty");
+        return (clientStacks.get(clientID).empty());
     }
 
     // Implementation of delayPop
-    public int delayPop(int millis) throws RemoteException {
+    public int delayPop(int millis, int clientID) throws RemoteException {
         int value = 0;
         try {
             System.out.println("Delaying pop for " + millis + " milliseconds");
-            TimeUnit.MILLISECONDS.sleep(millis);
-            value = stk.peek();
-            stk.pop();
+            // TimeUnit.MILLISECONDS.sleep(millis);
+            Thread.sleep(millis);
+            value = clientStacks.get(clientID).peek();
+            clientStacks.get(clientID).pop();
         } catch (InterruptedException e) {
             System.out.println("Interrupted exception: " + e.toString());
             e.printStackTrace();
