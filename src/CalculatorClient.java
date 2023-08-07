@@ -1,6 +1,5 @@
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.io.*;
 import java.util.*;
 
 public class CalculatorClient {
@@ -19,24 +18,28 @@ public class CalculatorClient {
         System.out.println("6. Exit");
     }
 
-    // Performs the pushValue option. Pushes one value at a time.
+    // Adds one value at a time to the client stack.
     private void pushValueOption(Calculator stub, int clientID) {
-        System.out.println("Enter the value you would like to push to the stack.");
-        Scanner scanner = new Scanner(System.in);
-        int val = scanner.nextInt();
-        try {
-            stub.pushValue(val, clientID);
-        } catch (Exception e) {
-            System.err.println("Client exception: " + e.toString());
-            e.printStackTrace();
+        System.out.println("Enter the value you would like to push to the stack. Only integers are accepted.");
+
+        // Read user input
+        try (Scanner scanner = new Scanner(System.in)) {
+            int val = scanner.nextInt();
+            try {
+                // Push value to stack
+                stub.pushValue(val, clientID);
+            } catch (Exception e) {
+                System.err.println("Client exception: " + e.toString());
+                e.printStackTrace();
+            }
+            System.out.println("Value: " + val + " pushed.");
         }
-        System.out.println("Value: " + val + " pushed.");
     }
 
     // Performs the pushOperation option. Pushes one operation at a time.
     private void pushOperationOption(Calculator stub, int clientID) {
         // Display menu of operations
-        System.out.println("Enter the number of the operation you would like to perform on the values in the stack.");
+        System.out.println("What operation would you like to perform? Enter the option number i.e. 1 for \"min\".");
         System.out.println("1. min");
         System.out.println("2. max");
         System.out.println("3. lcm");
@@ -44,70 +47,73 @@ public class CalculatorClient {
         System.out.println("5. exit");
 
         // Read user input
-        Scanner scanner = new Scanner(System.in);
-        int operation = 0;
-        while (true) {
-            operation = scanner.nextInt();
-            if (operation > 5 || operation < 1) {
-                System.out.println("Invalid option. Please enter a number between 1 and 5.");
-                continue;
-            } else {
-                break;
-            }
-        }
-
-        // Perform action based on user input
-        if (operation == 1) {
-            try {
-                stub.pushOperation("min", clientID);
-            } catch (Exception e) {
-                System.err.println("Client exception: " + e.toString());
-                e.printStackTrace();
-            }
-        } else if (operation == 2) {
-            try {
-                stub.pushOperation("max", clientID);
-            } catch (Exception e) {
-                System.err.println("Client exception: " + e.toString());
-                e.printStackTrace();
-            }
-        } else if (operation == 3) {
-            // Check if stack contains 0. 
-            boolean containsZero = false;
-            try {
-                containsZero = stub.hasZero(clientID);
-            } catch (Exception e) {
-                System.err.println("Client exception: " + e.toString());
-                e.printStackTrace();
+        try (Scanner scanner = new Scanner(System.in)) {
+            int operation = 0;
+            while (true) {
+                operation = scanner.nextInt();
+                // Check if input is valid, else print error message.
+                if (operation > 5 || operation < 1) {
+                    System.out.println("Invalid option. Please enter a number between 1 and 5.");
+                    continue;
+                } else {
+                    break;
+                }
             }
 
-            // If yes, clear stack and return error message. Otherwise, push lcm operation.
-            if (containsZero) {
-                System.out.println("Cannot perform lcm on 0. All values have been removed from stack. Please enter a non-zero value.");
-                return;
-            } else {
+            // Call operation based on user input
+            if (operation == 1) {
                 try {
-                    stub.pushOperation("lcm", clientID);
+                    stub.pushOperation("min", clientID);
                 } catch (Exception e) {
                     System.err.println("Client exception: " + e.toString());
                     e.printStackTrace();
                 }
+            } else if (operation == 2) {
+                try {
+                    stub.pushOperation("max", clientID);
+                } catch (Exception e) {
+                    System.err.println("Client exception: " + e.toString());
+                    e.printStackTrace();
+                }
+            } else if (operation == 3) {
+                // Check if stack contains 0. 
+                boolean containsZero = false;
+                try {
+                    containsZero = stub.hasZero(clientID);
+                } catch (Exception e) {
+                    System.err.println("Client exception: " + e.toString());
+                    e.printStackTrace();
+                }
+
+                // If yes, clear stack and return error message. Otherwise, push lcm operation.
+                if (containsZero) {
+                    System.out.println("Cannot perform lcm on 0. All values have been removed from stack. Please enter a non-zero value.");
+                    return;
+                } else {
+                    try {
+                        stub.pushOperation("lcm", clientID);
+                    } catch (Exception e) {
+                        System.err.println("Client exception: " + e.toString());
+                        e.printStackTrace();
+                    }
+                }
+            } else if (operation == 4) {
+                try {
+                    stub.pushOperation("gcd", clientID);
+                } catch (Exception e) {
+                    System.err.println("Client exception: " + e.toString());
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Back to Main Menu...");
             }
-        } else if (operation == 4) {
-            try {
-                stub.pushOperation("gcd", clientID);
-            } catch (Exception e) {
-                System.err.println("Client exception: " + e.toString());
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Back to Main Menu...");
         }
     }
 
     // Performs the pop option. Pops one value at a time.
     private void popOption(Calculator stub, int clientID) {
         try {
+            // Call the pop operation on the client and print the result
             int result = stub.pop(clientID);
             System.out.println("Result: " + result);
         } catch (Exception e) {
@@ -120,6 +126,7 @@ public class CalculatorClient {
     private boolean isEmptyOption(Calculator stub, int clientID) {
         boolean result = true;
         try {
+            // Call the isEmpty operation on the client and print the result
             result = stub.isEmpty(clientID);
             if (result) {
                 System.out.println("Stack is empty.");
@@ -136,14 +143,18 @@ public class CalculatorClient {
     // Pops one value at a time after a delay.
     private void delayPopOption(Calculator stub, int clientID) {
         System.out.println("Enter the number of milliseconds you would like to delay the pop operation.");
-        Scanner scanner = new Scanner(System.in);
-        int millis = scanner.nextInt();
-        try {
-            int result = stub.delayPop(millis, clientID);
-            System.out.println("Result: " + result);
-        } catch (Exception e) {
-            System.err.println("Client exception: " + e.toString());
-            e.printStackTrace();
+
+        // Get the user input
+        try (Scanner scanner = new Scanner(System.in)) {
+            int millis = scanner.nextInt();
+            try {
+                // Call the delayPop operation on the client and print the result.
+                int result = stub.delayPop(millis, clientID);
+                System.out.println("Result: " + result);
+            } catch (Exception e) {
+                System.err.println("Client exception: " + e.toString());
+                e.printStackTrace();
+            }
         }
     }
 
@@ -159,11 +170,15 @@ public class CalculatorClient {
             // Allocate unique client ID to each client
             CalculatorClient client = new CalculatorClient();
             System.out.println("Welcome to the Calculator application!");
-            System.out.println("Please create your client ID to begin. Any positive integer is valid.");
+            System.out.println("Please create your client ID to begin. Enter a positive integer.");
+
+            // Read client ID
             Scanner scanner = new Scanner(System.in);
             int clientID = -1;
             while (true) {
                 clientID = scanner.nextInt();
+
+                // Check if client ID is valid or already exists
                 if (clientID < 0) {
                     System.out.println("Invalid client ID. Please enter a positive integer.");
                     continue;
@@ -171,6 +186,7 @@ public class CalculatorClient {
                     System.out.println("Client ID " + clientID + " already exists. Please choose a different client ID.");
                     continue;
                 } else if (stub.createNewClientID(clientID)) {
+                    // ID is valid so create new client stack and exit loop.
                     System.out.println("Client ID " + clientID + " created.");
                     stub.createNewClientStack(clientID);
                     break;
@@ -189,6 +205,8 @@ public class CalculatorClient {
                 int option = 0;
                 while (true) {
                     option = scanner.nextInt();
+
+                    // Check if input is valid, otherwise print error message and wait for valid input.
                     if (option > 6 || option < 1) {
                         System.out.println("Invalid option. Please enter a number between 1 and 6.");
                         continue;
@@ -197,7 +215,7 @@ public class CalculatorClient {
                     }
                 }
 
-                // Perform action based on user input
+                // Call the appropriate method based on user input
                 if (option == 1) {
                     client.pushValueOption(stub, clientID);
                 } else if (option == 2) {

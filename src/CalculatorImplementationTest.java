@@ -185,6 +185,74 @@ public class CalculatorImplementationTest {
     }
 
     @Test
+    @DisplayName("Single Client: Test pop method on empty stack")
+    void popTest1() throws RemoteException {
+        CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
+        calc.pop(0);
+        String expectedOutput = "Checking if client stack is empty\nError: Stack is empty. Please push a value before popping.";
+        assertEquals(expectedOutput, outputStreamCaptor.toString().trim());
+    }
+
+    @Test
+    @DisplayName("Single Client: Test pop method on values {5,4,3}")
+    void popTest2() throws RemoteException {
+        CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
+        calc.pushValue(5, 0);
+        calc.pushValue(4, 0);
+        calc.pushValue(3, 0);
+        int expectedOutput = 3;
+        int output = calc.pop(0);
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    @DisplayName("Single Client: Test isEmpty method on empty stack")
+    void isEmptyTest1() throws RemoteException {
+        CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
+        boolean expectedOutput = true;
+        boolean output = calc.isEmpty(0);
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    @DisplayName("Single Client: Test isEmpty method on values {87, 0, -8}")
+    void isEmptyTest2() throws RemoteException {
+        CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
+        calc.pushValue(87, 0);
+        calc.pushValue(0, 0);
+        calc.pushValue(-8, 0);
+        boolean expectedOutput = false;
+        boolean output = calc.isEmpty(0);
+        assertEquals(expectedOutput, output);
+    }
+
+    @Test
+    @DisplayName("Multiple Client: Test delayPop method on {15, 16} for client ID 1 and pop method on {1, 2} for client ID 2")
+    void delayPopTest1() throws RemoteException {
+        CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(1);
+        calc.createNewClientStack(1);
+        calc.createNewClientID(2);
+        calc.createNewClientStack(2);
+        calc.pushValue(15, 1);
+        calc.pushValue(16, 1);
+        calc.pushValue(1, 2);
+        calc.pushValue(2, 2);
+        String expectedOutput = "Pushing value 15\nPushing value 16\nPushing value 1\nPushing value 2\nDelaying pop for 10000 milliseconds\nChecking if client stack is empty\nPopping value";
+        calc.delayPop(10000, 1);
+        calc.pop(2);
+        assertEquals(expectedOutput, outputStreamCaptor.toString().trim());
+    }
+
+    @Test
     @DisplayName("Multiple Client: Test min operation with values {3, 5} for client ID 1 and {7, 9} for client ID 2")
     void minOperationTest3() throws RemoteException {
         CalculatorImplementation calc = new CalculatorImplementation();
