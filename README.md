@@ -68,7 +68,8 @@ java  -classpath ./ CalculatorClient
 1. Open the project folder and select the test script `CalculatorImplementationTest.java`.
 
 2. Click on the testing button on the left sidebar.
-![Uploading Screenshot 2023-08-07 at 3.04.17 pm.png…]()
+<img width="1378" alt="Screenshot 2023-08-07 at 3 04 17 pm" src="https://github.com/clariechek/JavaRMI/assets/44283405/27fd4cb0-e693-40f2-b7dd-86ce8e729259">
+
 
 3. Select Enable Java Tests
 <img width="275" alt="Screenshot 2023-08-07 at 3 05 17 pm" src="https://github.com/clariechek/JavaRMI/assets/44283405/492fd8da-0ba4-4b94-b5a4-4a81d1df0821">
