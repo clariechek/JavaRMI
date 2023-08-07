@@ -76,7 +76,8 @@ java  -classpath ./ CalculatorClient
 4. In the dropdown menu, select JUnit Jupiter.
 <img width="275" alt="Screenshot 2023-08-07 at 3 05 47 pm" src="https://github.com/clariechek/JavaRMI/assets/44283405/ced2905b-79b0-45cf-a85e-e9506c0ff9f9">
 
-5. To run the tests, select the play button next to the JavaRMI title as shown below. Alternatively, you can run each test individually by clicking the play button next to each test title.
+
+5. To run the tests, select the play button next to the JavaRMI title as shown in the video link below. Alternatively, you can run each test individually by clicking the play button next to each test title.
 https://github.com/clariechek/JavaRMI/assets/44283405/0ff80949-5b6b-4d0e-a4d6-f8239762fa63
 
 
