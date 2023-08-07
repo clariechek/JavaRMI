@@ -54,29 +54,30 @@ java  -classpath ./ CalculatorClient
 ```
 
 ## Testing
-### Testing Requirements
+### Setup
 1. The test script is located in the `tests` folder. To run the tests in Visual Studio Code, you will need:
 - JDK (version 1.8 or later)
 - Visual Studio Code (version 1.59.0 or later)
 - [Visual Studio Code Extension Pack for Java](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack)
 
+
 2. Follow the 'Get Started with Java Development' instructions on Visual Studio Code by clicking the `Install JDK` button (on the left of the screenshot below) and blue `Download` button (on the right of the screenshot below).
 <img width="1137" alt="Screenshot 2023-08-07 at 2 58 49 pm" src="https://github.com/clariechek/JavaRMI/assets/44283405/37a2d5c7-5e6b-4ee9-9e73-355de496eea7">
 
-3. Open the project folder and select the test script `CalculatorImplementationTest.java`.
+### Running automated tests
+1. Open the project folder and select the test script `CalculatorImplementationTest.java`.
 
-4. Click on the testing button on the left sidebar.
+2. Click on the testing button on the left sidebar.
 ![Uploading Screenshot 2023-08-07 at 3.04.17 pm.png…]()
 
-5. Select Enable Java Tests
+3. Select Enable Java Tests
 <img width="275" alt="Screenshot 2023-08-07 at 3 05 17 pm" src="https://github.com/clariechek/JavaRMI/assets/44283405/492fd8da-0ba4-4b94-b5a4-4a81d1df0821">
 
-6. In the dropdown menu, select JUnit Jupiter.
+4. In the dropdown menu, select JUnit Jupiter.
 <img width="275" alt="Screenshot 2023-08-07 at 3 05 47 pm" src="https://github.com/clariechek/JavaRMI/assets/44283405/ced2905b-79b0-45cf-a85e-e9506c0ff9f9">
 
-7. To run the tests, select the play button next to the JavaRMI title as shown below. Alternatively, you can run each test individually by clicking the play button next to each test title.
+5. To run the tests, select the play button next to the JavaRMI title as shown below. Alternatively, you can run each test individually by clicking the play button next to each test title.
 https://github.com/clariechek/JavaRMI/assets/44283405/0ff80949-5b6b-4d0e-a4d6-f8239762fa63
 
 
-
-For more information: https://code.visualstudio.com/docs/java/java-testing
+For more information on Java testing in VS Code: https://code.visualstudio.com/docs/java/java-testing
