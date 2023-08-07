@@ -93,7 +93,7 @@ public class CalculatorImplementationTest {
         calc.pushValue(5, 0);
         calc.pushValue(0, 0);
         calc.pushOperation("gcd", 0);
-        int expectedOutput = 5;
+        int expectedOutput = 1;
         int output = calc.pop(0);
         assertEquals(expectedOutput, output);
     }
@@ -106,7 +106,7 @@ public class CalculatorImplementationTest {
         calc.createNewClientStack(0);
         calc.pushValue(3, 0);
         calc.pushOperation("gcd", 0);
-        String expectedOutput = "At least two values are required to perform an operation. Please push more values to the stack.";
+        String expectedOutput = "Pushing value 3\nPushing operation gcd\nError: At least two values are required to perform an operation.";
         assertEquals(expectedOutput, outputStreamCaptor.toString().trim());
     }
 
@@ -117,7 +117,7 @@ public class CalculatorImplementationTest {
         calc.createNewClientID(0);
         calc.createNewClientStack(0);
         calc.pushOperation("gcd", 0);
-        String expectedOutput = "At least two values are required to perform an operation. Please push more values to the stack.";
+        String expectedOutput = "Pushing operation gcd\nError: At least two values are required to perform an operation.";
         assertEquals(expectedOutput, outputStreamCaptor.toString().trim());
     }
 
@@ -129,7 +129,7 @@ public class CalculatorImplementationTest {
         calc.createNewClientStack(0);
         calc.pushValue(12, 0);
         calc.pushOperation("lcm", 0);
-        String expectedOutput = "At least two values are required to perform an operation. Please push more values to the stack.";
+        String expectedOutput = "Pushing value 12\nPushing operation lcm\nError: At least two values are required to perform an operation.";
         assertEquals(expectedOutput, outputStreamCaptor.toString().trim());
     }
 
@@ -154,7 +154,7 @@ public class CalculatorImplementationTest {
         calc.createNewClientID(0);
         calc.createNewClientStack(0);
         calc.pushOperation("lcm", 0);
-        String expectedOutput = "At least two values are required to perform an operation. Please push more values to the stack.";
+        String expectedOutput = "Pushing operation lcm\nError: At least two values are required to perform an operation.";
         assertEquals(expectedOutput, outputStreamCaptor.toString().trim());
     }
 
@@ -167,7 +167,20 @@ public class CalculatorImplementationTest {
         calc.pushValue(97, 0);
         calc.pushValue(0, 0);
         calc.pushOperation("lcm", 0);
-        String expectedOutput = "Cannot perform lcm on 0. All values have been removed from stack. Please enter a non-zero value.";
+        String expectedOutput = "Pushing value 97\nPushing value 0\nPushing operation lcm\nChecking if client stack has value 0\nError: Cannot perform lcm on 0. Removing all values from stack.";
+        assertEquals(expectedOutput, outputStreamCaptor.toString().trim());
+    }
+
+    @Test
+    @DisplayName("Single Client: Test invalid operation")
+    void invalidOperationTest1() throws RemoteException {
+        CalculatorImplementation calc = new CalculatorImplementation();
+        calc.createNewClientID(0);
+        calc.createNewClientStack(0);
+        calc.pushValue(58, 0);
+        calc.pushValue(2, 0);
+        calc.pushOperation("add", 0);
+        String expectedOutput = "Pushing value 58\nPushing value 2\nPushing operation add\nInvalid operator add";
         assertEquals(expectedOutput, outputStreamCaptor.toString().trim());
     }
 

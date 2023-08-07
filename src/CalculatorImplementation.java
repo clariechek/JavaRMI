@@ -54,6 +54,16 @@ public class CalculatorImplementation extends UnicastRemoteObject implements Cal
             }
             clientStacks.get(clientID).push(maximumVal);
         } else if (operator.equals("lcm")) {
+            // Check if the stack has at least 2 values
+            if (clientStacks.get(clientID).size() < 2) {
+                System.out.println("Error: At least two values are required to perform an operation.");
+                return;
+            }
+            // Check if stack contains 0. If yes, clear stack and return error message.
+            if (hasZero(clientID)) {
+                System.out.println("Error: Cannot perform lcm on 0. Removing all values from stack.");
+                return;
+            }
             // Find the least common multiple of all the absolute values on the clientStacks
             while (clientStacks.get(clientID).size() > 1) {
                 int a = Math.abs(clientStacks.get(clientID).peek());
@@ -63,14 +73,11 @@ public class CalculatorImplementation extends UnicastRemoteObject implements Cal
                 clientStacks.get(clientID).push(lcm(a, b));
             }
         } else if (operator.equals("gcd")) {
-            // // Check if the stack is empty or has only one value
-            // if (clientStacks.get(clientID).size() == 0) {
-            //     System.out.println("Stack is empty. At least two values are required to perform gcd.");
-            //     return;
-            // } else if (clientStacks.get(clientID).size() < 2) {
-            //     System.out.println("Stack has only one value. At least two values are required to perform gcd.");
-            //     return;
-            // }
+            // Check if the stack has at least 2 values
+            if (clientStacks.get(clientID).size() < 2) {
+                System.out.println("Error: At least two values are required to perform an operation.");
+                return;
+            }
             // Find the greatest common divisor of the absolute values on the clientStacks
             while (clientStacks.get(clientID).size() > 1) {
                 int a = Math.abs(clientStacks.get(clientID).peek());
@@ -139,7 +146,7 @@ public class CalculatorImplementation extends UnicastRemoteObject implements Cal
 
     // Check if the client stack has value 0. If yes, pop all values from the stack.
     public boolean hasZero(int clientID) throws RemoteException {
-        System.out.println("Checking if clientStacks has value 0");
+        System.out.println("Checking if client stack has value 0");
         if (clientStacks.get(clientID).contains(0)) {
             while (!clientStacks.get(clientID).empty()) {
                 clientStacks.get(clientID).pop();
